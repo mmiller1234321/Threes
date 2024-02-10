@@ -1,0 +1,47 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .dice-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    overflow-x: auto;
+  }
+  
+  .die {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border: 1px solid black;
+    margin: 0 5px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+  .removed-dice-container {
+    margin-top: 20px;
+  }
+  
+  .removed-die {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border: 1px solid black;
+    margin: 0 5px;
+    font-size: 20px;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
