@@ -14,7 +14,8 @@ body {
     justify-content: center;
     margin-bottom: 20px;
     overflow-x: auto;
-  }
+    margin-top: 20px;
+    }
   
   .die {
     display: inline-block;
@@ -43,5 +44,10 @@ body {
   
   .hidden {
     display: none;
+  }
+
+  .submit-score-btn{
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
   
