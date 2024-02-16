@@ -48,10 +48,11 @@ document.addEventListener('DOMContentLoaded', function () {
       alert('Please enter your name.');
       return;
     }
-    if (checkAllSixes()) {
-      totalScore = -1;
+    let score = totalScore;
+    if (dice.every(value => value === 6)) {
+      score = -1;
     }
-    saveScore(name, totalScore);
+    saveScore(name, score);
     const showLeaderboard = confirm('Would you like to see the leaderboard?');
     if (showLeaderboard) {
       showLeaderboardPage();
@@ -71,11 +72,6 @@ document.addEventListener('DOMContentLoaded', function () {
     for (let i = 0; i < 5 - removedDice.length; i++) {
       dice.push(Math.floor(Math.random() * 6) + 1);
     }
-  }
-
-  // Function to check if all dice are sixes
-  function checkAllSixes() {
-    return dice.every(value => value === 6);
   }
 
   // Function to render the dice
@@ -107,9 +103,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // Function to handle the game over scenario
   function gameOver() {
     gameOverDiv.classList.remove('hidden');
-    if (checkAllSixes()) {
-      totalScore = -1;
-    }
     finalScoreDisplay.textContent = `Final Score: ${totalScore}`;
   }
 
@@ -150,3 +143,4 @@ document.addEventListener('DOMContentLoaded', function () {
     canRoll = true;
   }
 });
+
