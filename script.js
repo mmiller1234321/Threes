@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const finalScoreDisplay = document.getElementById('final-score');
   const nameInput = document.getElementById('name-input');
   const submitScoreBtn = document.getElementById('submit-score-btn');
-  const leaderboardDiv = document.getElementById('leaderboard');
+  const leaderboardModal = document.getElementById('leaderboard-modal');
   const leaderboardTable = document.getElementById('leaderboard-table');
-  const playAgainBtn = document.getElementById('play-again-btn');
+  const playAgainBtnModal = document.getElementById('play-again-btn-modal');
   let dice = [];
   let removedDice = [];
   let totalScore = 0;
@@ -48,22 +48,19 @@ document.addEventListener('DOMContentLoaded', function () {
       alert('Please enter your name.');
       return;
     }
-    let score = totalScore;
-    if (dice.every(value => value === 6)) {
-      score = -1;
-    }
-    saveScore(name, score);
+    saveScore(name, totalScore);
     const showLeaderboard = confirm('Would you like to see the leaderboard?');
     if (showLeaderboard) {
-      showLeaderboardPage();
+      showLeaderboardModal();
     } else {
       resetGame();
     }
   });
 
-  // Event listener for play again button
-  playAgainBtn.addEventListener('click', function () {
+  // Event listener for play again button (in modal)
+  playAgainBtnModal.addEventListener('click', function () {
     resetGame();
+    leaderboardModal.style.display = 'none'; // Hide the modal after resetting the game
   });
 
   // Function to roll the dice
@@ -118,8 +115,8 @@ document.addEventListener('DOMContentLoaded', function () {
     localStorage.setItem('threesScores', JSON.stringify(scores));
   }
 
-  // Function to show the leaderboard page
-  function showLeaderboardPage() {
+  // Function to show the leaderboard modal
+  function showLeaderboardModal() {
     const scores = JSON.parse(localStorage.getItem('threesScores')) || [];
     leaderboardTable.innerHTML = '';
     scores.forEach((entry, index) => {
@@ -127,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
       row.textContent = `${index + 1}. ${entry.name} - Score: ${entry.score} - Date: ${entry.date}`;
       leaderboardTable.appendChild(row);
     });
-    leaderboardDiv.classList.remove('hidden');
+    leaderboardModal.style.display = 'block'; // Show the modal
   }
 
   // Function to reset the game
@@ -137,10 +134,8 @@ document.addEventListener('DOMContentLoaded', function () {
     totalScore = 0;
     totalScoreDisplay.textContent = 'Total Score: 0';
     gameOverDiv.classList.add('hidden');
-    leaderboardDiv.classList.add('hidden');
     rollBtn.disabled = false;
     removedDice = [];
     canRoll = true;
   }
 });
-
