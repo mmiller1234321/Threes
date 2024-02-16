@@ -1,3 +1,4 @@
+/* Add your CSS styles here */
 /* General styles */
 body {
   font-family: Arial, sans-serif;
@@ -76,9 +77,9 @@ body {
   width: 80%;
   max-width: 600px;
   border-radius: 5px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
+  position: fixed; /* Update position to fixed */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
   transform: translate(-50%, -50%);
 }
 
@@ -129,4 +130,3 @@ body {
     right: unset; /* Remove right position */
   }
 }
-
