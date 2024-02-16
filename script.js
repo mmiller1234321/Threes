@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
   const rollBtn = document.getElementById('roll-dice-btn');
-  const instructionsBtn = document.getElementById('instructions-btn');
   const diceContainer = document.getElementById('dice-container');
   const removedDiceContainer = document.getElementById('removed-dice');
   const totalScoreDisplay = document.getElementById('total-score');
@@ -8,12 +7,12 @@ document.addEventListener('DOMContentLoaded', function () {
   const finalScoreDisplay = document.getElementById('final-score');
   const nameInput = document.getElementById('name-input');
   const submitScoreBtn = document.getElementById('submit-score-btn');
-  const leaderboardModal = document.getElementById('leaderboard-modal');
+  const leaderboardDiv = document.getElementById('leaderboard');
   const leaderboardTable = document.getElementById('leaderboard-table');
-  const playAgainBtn = document.getElementById('play-again-btn-modal');
+  const playAgainBtn = document.getElementById('play-again-btn');
+  const instructionsBtn = document.getElementById('instructions-btn');
   const instructionsModal = document.getElementById('instructions-modal');
-  const closeLeaderboardBtn = document.querySelector('#leaderboard-modal .close');
-
+  const closeBtns = document.querySelectorAll('.close');
   let dice = [];
   let removedDice = [];
   let totalScore = 0;
@@ -52,13 +51,17 @@ document.addEventListener('DOMContentLoaded', function () {
       alert('Please enter your name.');
       return;
     }
+
+    // Calculate final score
+    let finalScore = totalScore;
     if (checkAllSixes()) {
-      totalScore = -1;
+      finalScore = -1;
     }
-    saveScore(name, totalScore);
+
+    saveScore(name, finalScore);
     const showLeaderboard = confirm('Would you like to see the leaderboard?');
     if (showLeaderboard) {
-      showLeaderboardModal();
+      showLeaderboardPage();
     } else {
       resetGame();
     }
@@ -74,18 +77,15 @@ document.addEventListener('DOMContentLoaded', function () {
     instructionsModal.style.display = 'block';
   });
 
-  // Event listener for closing modals
-  document.querySelectorAll('.modal .close').forEach(closeBtn => {
-    closeBtn.addEventListener('click', function () {
-      this.parentElement.parentElement.style.display = 'none'; // Hide the parent modal
-      resetGame(); // Reset the game
+  // Event listeners for closing modals
+  closeBtns.forEach(btn => {
+    btn.addEventListener('click', function () {
+      const modal = btn.parentElement.parentElement;
+      modal.style.display = 'none';
+      if (modal === instructionsModal) {
+        resetGame();
+      }
     });
-  });
-
-  // Event listener for closing leaderboard modal
-  closeLeaderboardBtn.addEventListener('click', function () {
-    leaderboardModal.style.display = 'none'; // Hide the leaderboard modal
-    resetGame(); // Reset the game
   });
 
   // Function to roll the dice
@@ -148,8 +148,8 @@ document.addEventListener('DOMContentLoaded', function () {
     localStorage.setItem('threesScores', JSON.stringify(scores));
   }
 
-  // Function to show the leaderboard modal
-  function showLeaderboardModal() {
+  // Function to show the leaderboard page
+  function showLeaderboardPage() {
     const scores = JSON.parse(localStorage.getItem('threesScores')) || [];
     leaderboardTable.innerHTML = '';
     scores.forEach((entry, index) => {
@@ -157,7 +157,8 @@ document.addEventListener('DOMContentLoaded', function () {
       row.textContent = `${index + 1}. ${entry.name} - Score: ${entry.score} - Date: ${entry.date}`;
       leaderboardTable.appendChild(row);
     });
-    leaderboardModal.style.display = 'block'; // Show the modal
+    leaderboardDiv.classList.remove('hidden');
+    leaderboardDiv.style.display = 'block'; // Ensure the leaderboard is visible
   }
 
   // Function to reset the game
@@ -167,9 +168,11 @@ document.addEventListener('DOMContentLoaded', function () {
     totalScore = 0;
     totalScoreDisplay.textContent = 'Total Score: 0';
     gameOverDiv.classList.add('hidden');
-    leaderboardModal.style.display = 'none';
+    leaderboardDiv.classList.add('hidden');
+    instructionsModal.style.display = 'none'; // Hide instructions modal
     rollBtn.disabled = false;
     removedDice = [];
     canRoll = true;
   }
 });
+
