@@ -2,11 +2,15 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  background-color: #c6ebeb; /* Green felt color */
 }
 
 .container {
+  position: absolute;
+  top: 25%;
+  left: 0;
+  width: 100%;
   text-align: center;
-  margin-top: 20px;
 }
 
 .dice-container {
@@ -60,7 +64,7 @@ body {
 }
 
 .modal-content {
-  background-color: #fefefe;
+  background-color: #39bdd4; /* Green felt color */
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
