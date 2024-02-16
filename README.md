@@ -1,6 +1,10 @@
-# Threes
 
 Classic Bar Game. 
+
+## New in Version 2
+Instructions!!!
+Improved styling!!!
+
 
 ## Current Development
 Current version (V1) is a functional version of Threes (also known as "The Secret Dice Game"). Currently refactoring for better design and functionality. 

@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
   const rollBtn = document.getElementById('roll-dice-btn');
+  const instructionsBtn = document.getElementById('instructions-btn');
   const diceContainer = document.getElementById('dice-container');
   const removedDiceContainer = document.getElementById('removed-dice');
   const totalScoreDisplay = document.getElementById('total-score');
@@ -9,7 +10,10 @@ document.addEventListener('DOMContentLoaded', function () {
   const submitScoreBtn = document.getElementById('submit-score-btn');
   const leaderboardModal = document.getElementById('leaderboard-modal');
   const leaderboardTable = document.getElementById('leaderboard-table');
-  const playAgainBtnModal = document.getElementById('play-again-btn-modal');
+  const playAgainBtn = document.getElementById('play-again-btn-modal');
+  const instructionsModal = document.getElementById('instructions-modal');
+  const closeLeaderboardBtn = document.querySelector('#leaderboard-modal .close');
+
   let dice = [];
   let removedDice = [];
   let totalScore = 0;
@@ -48,6 +52,9 @@ document.addEventListener('DOMContentLoaded', function () {
       alert('Please enter your name.');
       return;
     }
+    if (checkAllSixes()) {
+      totalScore = -1;
+    }
     saveScore(name, totalScore);
     const showLeaderboard = confirm('Would you like to see the leaderboard?');
     if (showLeaderboard) {
@@ -57,10 +64,28 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // Event listener for play again button (in modal)
-  playAgainBtnModal.addEventListener('click', function () {
+  // Event listener for play again button
+  playAgainBtn.addEventListener('click', function () {
     resetGame();
-    leaderboardModal.style.display = 'none'; // Hide the modal after resetting the game
+  });
+
+  // Event listener for instructions button
+  instructionsBtn.addEventListener('click', function () {
+    instructionsModal.style.display = 'block';
+  });
+
+  // Event listener for closing modals
+  document.querySelectorAll('.modal .close').forEach(closeBtn => {
+    closeBtn.addEventListener('click', function () {
+      this.parentElement.parentElement.style.display = 'none'; // Hide the parent modal
+      resetGame(); // Reset the game
+    });
+  });
+
+  // Event listener for closing leaderboard modal
+  closeLeaderboardBtn.addEventListener('click', function () {
+    leaderboardModal.style.display = 'none'; // Hide the leaderboard modal
+    resetGame(); // Reset the game
   });
 
   // Function to roll the dice
@@ -69,6 +94,11 @@ document.addEventListener('DOMContentLoaded', function () {
     for (let i = 0; i < 5 - removedDice.length; i++) {
       dice.push(Math.floor(Math.random() * 6) + 1);
     }
+  }
+
+  // Function to check if all dice are sixes
+  function checkAllSixes() {
+    return dice.every(value => value === 6);
   }
 
   // Function to render the dice
@@ -100,6 +130,9 @@ document.addEventListener('DOMContentLoaded', function () {
   // Function to handle the game over scenario
   function gameOver() {
     gameOverDiv.classList.remove('hidden');
+    if (checkAllSixes()) {
+      totalScore = -1;
+    }
     finalScoreDisplay.textContent = `Final Score: ${totalScore}`;
   }
 
@@ -134,6 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
     totalScore = 0;
     totalScoreDisplay.textContent = 'Total Score: 0';
     gameOverDiv.classList.add('hidden');
+    leaderboardModal.style.display = 'none';
     rollBtn.disabled = false;
     removedDice = [];
     canRoll = true;

@@ -10,6 +10,7 @@
 
 <div class="container">
   <button id="roll-dice-btn">Roll Dice</button>
+  <button id="instructions-btn">Instructions</button>
   <div class="dice-container" id="dice-container"></div>
   <div class="removed-dice-container">
     <h2>Removed Dice</h2>
@@ -34,6 +35,24 @@
     <button id="play-again-btn-modal">Play Again</button>
   </div>
 </div>
+
+<!-- Instructions Modal -->
+<div id="instructions-modal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Threes: The Secret Dice Game</h2>
+    <h3>Instructions</h3>
+    <ul>
+      <li>The goal is to get the lowest score. Each die is worth what it says (1=1, 5=5). Except 3. A 3 is worth 0 points.</li>
+      <li>After you roll the dice, you have to remove at least one die. Then you roll again.</li>
+      <li>Keep going until you have no more dice to roll.</li>
+      <li>If you finish with all 6’s, that is worth -1 points.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Secret Dice Game text -->
+<div class="secret-dice-game">Secret Dice Game</div>
 
 <script src="script.js"></script>
 </body>
