@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const instructionsBtn = document.getElementById('instructions-btn');
   const instructionsModal = document.getElementById('instructions-modal');
   const closeBtns = document.querySelectorAll('.close');
-  const closeLeaderboardBtn = document.getElementById('close-leaderboard');
 
   let dice = [];
   let removedDice = [];
@@ -55,14 +54,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Calculate final score
     let finalScore = totalScore;
-    if (checkAllSixes()) {
+    if (finalScore === 30) {
       finalScore = -1;
     }
 
     saveScore(name, finalScore);
     const showLeaderboard = confirm('Would you like to see the leaderboard?');
     if (showLeaderboard) {
-      showLeaderboardPage();
+      showLeaderboardPage(); // Open leaderboard if confirmed
     } else {
       resetGame();
     }
@@ -79,15 +78,11 @@ document.addEventListener('DOMContentLoaded', function () {
       const modal = btn.parentElement.parentElement;
       modal.style.display = 'none';
       if (modal === instructionsModal) {
-        resetGame();
+        // Do not restart the game when closing instructions modal
+      } else if (modal === leaderboardDiv) {
+        resetGame(); // Restart game if closing leaderboard modal
       }
     });
-  });
-
-  // Event listener for the close button in the leaderboard modal
-  closeLeaderboardBtn.addEventListener('click', function () {
-    leaderboardDiv.style.display = 'none'; // Hide leaderboard modal
-    resetGame(); // Restart the game
   });
 
   // Function to roll the dice
@@ -96,11 +91,6 @@ document.addEventListener('DOMContentLoaded', function () {
     for (let i = 0; i < 5 - removedDice.length; i++) {
       dice.push(Math.floor(Math.random() * 6) + 1);
     }
-  }
-
-  // Function to check if all dice are sixes
-  function checkAllSixes() {
-    return dice.every(value => value === 6);
   }
 
   // Function to render the dice
@@ -132,9 +122,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // Function to handle the game over scenario
   function gameOver() {
     gameOverDiv.classList.remove('hidden');
-    if (checkAllSixes()) {
-      totalScore = -1;
-    }
     finalScoreDisplay.textContent = `Final Score: ${totalScore}`;
   }
 
@@ -153,18 +140,14 @@ document.addEventListener('DOMContentLoaded', function () {
   // Function to show the leaderboard page
   function showLeaderboardPage() {
     const scores = JSON.parse(localStorage.getItem('threesScores')) || [];
-    const top11Scores = scores.slice(0, 11); // Show only top 11 scores
     leaderboardTable.innerHTML = '';
-    top11Scores.forEach((entry, index) => {
+    for (let i = 0; i < Math.min(scores.length, 11); i++) {
+      const entry = scores[i];
       const row = document.createElement('div');
-      row.textContent = `${index + 1}. ${entry.name} - Score: ${entry.score} - Date: ${entry.date}`;
+      row.textContent = `${i + 1}. ${entry.name} - Score: ${entry.score} - Date: ${entry.date}`;
       leaderboardTable.appendChild(row);
-    });
-    leaderboardDiv.classList.remove('hidden');
-    leaderboardDiv.style.display = 'block'; // Ensure the leaderboard is visible
-
-    // Display leaderboard modal as overlay
-    leaderboardDiv.classList.add('modal-overlay');
+    }
+    leaderboardDiv.style.display = 'block';
   }
 
   // Function to reset the game
@@ -175,7 +158,6 @@ document.addEventListener('DOMContentLoaded', function () {
     totalScoreDisplay.textContent = 'Total Score: 0';
     gameOverDiv.classList.add('hidden');
     leaderboardDiv.classList.add('hidden');
-    instructionsModal.style.display = 'none'; // Hide instructions modal
     rollBtn.disabled = false;
     removedDice = [];
     canRoll = true;
