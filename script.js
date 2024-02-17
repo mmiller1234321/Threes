@@ -120,10 +120,22 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Function to handle the game over scenario
-  function gameOver() {
-    gameOverDiv.classList.remove('hidden');
-    finalScoreDisplay.textContent = `Final Score: ${totalScore}`;
+function gameOver() {
+  gameOverDiv.classList.remove('hidden');
+  let finalScore = totalScore;
+  if (checkAllSixes()) {
+    finalScore = -1;
+  } else if (finalScore === 30) {
+    finalScore = -1;
   }
+  finalScoreDisplay.textContent = `Final Score: ${finalScore}`;
+}
+
+// Function to check if all dice are sixes
+function checkAllSixes() {
+  return dice.every(value => value === 6);
+}
+
 
   // Function to save the score and name in local storage
   function saveScore(name, score) {
