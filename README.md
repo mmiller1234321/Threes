@@ -14,7 +14,6 @@ Current version (V2) is a functional version of Threes (also known as "The Secre
 
 Link:
 https://mmiller1234321.github.io/Threes/
-![Threesdemo]("C:\Users\senat\OneDrive\Desktop\Threesdemo.gif")
-
 
 Demo:
+![Threesdemo](https://github.com/mmiller1234321/Threes/assets/148365315/829dfba1-a464-48e7-9c8e-29b83241c1f3)
