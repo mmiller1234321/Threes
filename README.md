@@ -5,9 +5,13 @@ Classic Bar Game.
 Instructions!!!
 Improved styling!!!
 Currently working on improved mobile styling and overall refactoring. 
+My attempt at versioning!
 
 ## 2.2
 Leaderboard Adjustments
+
+#2.2.1
+Adjusted logic for "All 6's" scenario
 
 ## Current Development
 Current version (V2) is a functional version of Threes (also known as "The Secret Dice Game"). Currently refactoring for better design and functionality. Found a bug? Please contact me. 
