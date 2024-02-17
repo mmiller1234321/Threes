@@ -22,18 +22,19 @@
     <input type="text" id="name-input" placeholder="Enter name">
     <button id="submit-score-btn">Submit Score</button>
   </div>
-  <div id="leaderboard" class="modal hidden">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Top 33 Leaderboard</h2>
-      <div id="leaderboard-table"></div>
-      <button id="play-again-btn">Play Again</button>
+  <div id="leaderboard" class="hidden">
+    <div id="leaderboard-modal" class="modal">
+      <div class="modal-content">
+        <span id="close-leaderboard" class="close">&times;</span> <!-- Close button -->
+        <h2>Top 11 Leaderboard</h2>
+        <div id="leaderboard-table"></div>
+      </div>
     </div>
   </div>
   <button id="instructions-btn">Instructions</button>
 </div>
 
-<div id="instructions-modal" class="modal hidden">
+<div id="instructions-modal" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
     <h2>Instructions</h2>
@@ -51,3 +52,5 @@
 <script src="script.js"></script>
 </body>
 </html>
+
+

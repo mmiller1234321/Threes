@@ -9,10 +9,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const submitScoreBtn = document.getElementById('submit-score-btn');
   const leaderboardDiv = document.getElementById('leaderboard');
   const leaderboardTable = document.getElementById('leaderboard-table');
-  const playAgainBtn = document.getElementById('play-again-btn');
   const instructionsBtn = document.getElementById('instructions-btn');
   const instructionsModal = document.getElementById('instructions-modal');
   const closeBtns = document.querySelectorAll('.close');
+  const closeLeaderboardBtn = document.getElementById('close-leaderboard');
+
   let dice = [];
   let removedDice = [];
   let totalScore = 0;
@@ -67,11 +68,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // Event listener for play again button
-  playAgainBtn.addEventListener('click', function () {
-    resetGame();
-  });
-
   // Event listener for instructions button
   instructionsBtn.addEventListener('click', function () {
     instructionsModal.style.display = 'block';
@@ -86,6 +82,12 @@ document.addEventListener('DOMContentLoaded', function () {
         resetGame();
       }
     });
+  });
+
+  // Event listener for the close button in the leaderboard modal
+  closeLeaderboardBtn.addEventListener('click', function () {
+    leaderboardDiv.style.display = 'none'; // Hide leaderboard modal
+    resetGame(); // Restart the game
   });
 
   // Function to roll the dice
@@ -151,14 +153,18 @@ document.addEventListener('DOMContentLoaded', function () {
   // Function to show the leaderboard page
   function showLeaderboardPage() {
     const scores = JSON.parse(localStorage.getItem('threesScores')) || [];
+    const top11Scores = scores.slice(0, 11); // Show only top 11 scores
     leaderboardTable.innerHTML = '';
-    scores.forEach((entry, index) => {
+    top11Scores.forEach((entry, index) => {
       const row = document.createElement('div');
       row.textContent = `${index + 1}. ${entry.name} - Score: ${entry.score} - Date: ${entry.date}`;
       leaderboardTable.appendChild(row);
     });
     leaderboardDiv.classList.remove('hidden');
     leaderboardDiv.style.display = 'block'; // Ensure the leaderboard is visible
+
+    // Display leaderboard modal as overlay
+    leaderboardDiv.classList.add('modal-overlay');
   }
 
   // Function to reset the game

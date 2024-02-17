@@ -1,4 +1,3 @@
-/* Add your CSS styles here */
 /* General styles */
 body {
   font-family: Arial, sans-serif;
@@ -57,39 +56,31 @@ body {
 }
 
 /* Modal Styles */
-.modal {
-  display: none;
+.modal-overlay {
   position: fixed;
-  z-index: 1;
-  left: 0;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
-  background-color: rgba(136, 206, 194, 0.5); /* Updated background color with rgba */
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Adjusted modal content */
-/* Modal Content */
 .modal-content {
   background-color: #fefefe;
+  margin: 20px;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
-  max-width: 600px;
+  width: calc(100% - 40px); /* Take full width of the screen */
+  max-width: 600px; /* Limit maximum width */
+  max-height: calc(100% - 40px); /* Ensure modal fits within the screen */
+  overflow-y: auto; /* Enable scrolling if modal content exceeds screen height */
   border-radius: 5px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  text-align: left; /* Align text to the left */
+  text-align: left;
 }
-
-/* Modal Text */
-.modal-content p {
-  text-align: center; /* Center text horizontally */
-}
-
 
 .close {
   color: #aaa;
@@ -136,5 +127,12 @@ body {
     bottom: 10px; /* Adjust position */
     left: 10px; /* Adjust position */
     right: unset; /* Remove right position */
+  }
+
+  .modal-content {
+    width: calc(100% - 40px); /* Take full width of the screen */
+    max-width: calc(100% - 40px); /* Limit maximum width */
+    max-height: calc(100% - 40px); /* Ensure modal fits within the screen */
+    overflow-y: auto; /* Enable scrolling if modal content exceeds screen height */
   }
 }
