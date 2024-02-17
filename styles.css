@@ -69,19 +69,27 @@ body {
   background-color: rgba(136, 206, 194, 0.5); /* Updated background color with rgba */
 }
 
+/* Adjusted modal content */
+/* Modal Content */
 .modal-content {
   background-color: #fefefe;
-  margin: 0;
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
   max-width: 600px;
   border-radius: 5px;
-  position: fixed; /* Update position to fixed */
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
+  position: absolute;
+  left: 50%;
+  top: 50%;
   transform: translate(-50%, -50%);
+  text-align: left; /* Align text to the left */
 }
+
+/* Modal Text */
+.modal-content p {
+  text-align: center; /* Center text horizontally */
+}
+
 
 .close {
   color: #aaa;
