@@ -13,8 +13,11 @@ Leaderboard Adjustments
 #2.2.1
 Adjusted logic for "All 6's" scenario
 
+## 2.3
+Added dice roll counter
+
 ## Current Development
-Current version (V2) is a functional version of Threes (also known as "The Secret Dice Game"). Currently refactoring for better design and functionality. Found a bug? Please contact me. 
+Current version (V2) is a functional version of Threes (also known as "The Secret Dice Game"). Currently refactoring for better design and functionality. Found a bug? Please contact me. mmiller1234321@gmail.com
 
 Link:
 https://mmiller1234321.github.io/Threes/
