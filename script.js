@@ -142,7 +142,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const scores = JSON.parse(localStorage.getItem('threesScores')) || [];
     const newScore = { name, score, date: new Date().toLocaleString(), rolls: rollsCount }; // Add rolls count to the new score
     scores.push(newScore);
-    scores.sort((a, b) => a.score - b.score);
+    scores.sort((a, b) => {
+      if (a.score !== b.score) {
+        return a.score - b.score;
+      } else {
+        // If scores are equal, the one with fewer rolls is better
+        return (a.rolls || 0) - (b.rolls || 0);
+      }
+    });
     if (scores.length > 33) {
       scores.splice(33);
     }
