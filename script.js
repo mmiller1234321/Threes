@@ -152,17 +152,19 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Function to show the leaderboard page
-  function showLeaderboardPage() {
-    const scores = JSON.parse(localStorage.getItem('threesScores')) || [];
-    leaderboardTable.innerHTML = '';
-    scores.forEach((entry, index) => {
-      const row = document.createElement('div');
-      row.textContent = `${index + 1}. ${entry.name} - Score: ${entry.score} - Date: ${entry.date}`;
-      leaderboardTable.appendChild(row);
-    });
-    leaderboardDiv.classList.remove('hidden');
-    leaderboardDiv.style.display = 'block'; // Ensure the leaderboard is visible
-  }
+function showLeaderboardPage() {
+  const scores = JSON.parse(localStorage.getItem('threesScores')) || [];
+  const topScores = scores.slice(0, 11); // Get the top 11 scores
+  leaderboardTable.innerHTML = '';
+  topScores.forEach((entry, index) => {
+    const row = document.createElement('div');
+    row.textContent = `${index + 1}. ${entry.name} - Score: ${entry.score} - Date: ${entry.date}`;
+    leaderboardTable.appendChild(row);
+  });
+  leaderboardDiv.classList.remove('hidden');
+  leaderboardDiv.style.display = 'block'; // Ensure the leaderboard is visible
+}
+
 
   // Function to reset the game
   function resetGame() {
