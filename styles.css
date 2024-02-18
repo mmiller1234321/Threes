@@ -130,3 +130,10 @@ body {
   }
 }
 
+#roll-dice-btn {
+  font-size: 110%; /* Increase font size by 10% */
+}
+
+#instructions-btn {
+  font-size: 100%; /* Reset font size to default */
+}

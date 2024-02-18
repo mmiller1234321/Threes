@@ -12,11 +12,22 @@ document.addEventListener('DOMContentLoaded', function () {
   const instructionsBtn = document.getElementById('instructions-btn');
   const instructionsModal = document.getElementById('instructions-modal');
   const closeBtns = document.querySelectorAll('.close');
+  const rollsCounter = document.getElementById('rolls-counter');
 
   let dice = [];
   let removedDice = [];
   let totalScore = 0;
+  let rollsCount = 0;
   let canRoll = true;
+
+  // Retrieve rolls count from local storage if available
+  const storedRollsCount = localStorage.getItem('threesRollsCount');
+  if (storedRollsCount) {
+    rollsCount = parseInt(storedRollsCount);
+  }
+
+  // Update rolls counter display
+  rollsCounter.textContent = `Number of Rolls: ${rollsCount}`;
 
   // Event listener for roll button
   rollBtn.addEventListener('click', function () {
@@ -25,6 +36,9 @@ document.addEventListener('DOMContentLoaded', function () {
       renderDice();
       rollBtn.disabled = true;
       canRoll = false;
+      rollsCount++; // Increase rolls count
+      rollsCounter.textContent = `Number of Rolls: ${rollsCount}`; // Update rolls counter display
+      localStorage.setItem('threesRollsCount', rollsCount); // Store rolls count in local storage
     }
   });
 
@@ -54,14 +68,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Calculate final score
     let finalScore = totalScore;
-    if (finalScore === 30) {
-      finalScore = -1;
-    }
-
     saveScore(name, finalScore);
     const showLeaderboard = confirm('Would you like to see the leaderboard?');
     if (showLeaderboard) {
-      showLeaderboardPage(); // Open leaderboard if confirmed
+      showLeaderboardPage();
     } else {
       resetGame();
     }
@@ -78,9 +88,11 @@ document.addEventListener('DOMContentLoaded', function () {
       const modal = btn.parentElement.parentElement;
       modal.style.display = 'none';
       if (modal === instructionsModal) {
-        // Do not restart the game when closing instructions modal
-      } else if (modal === leaderboardDiv) {
-        resetGame(); // Restart game if closing leaderboard modal
+        // Do not reset game when closing instructions modal
+        return;
+      }
+      if (modal === leaderboardDiv) {
+        resetGame(); // Restart the game when closing leaderboard modal
       }
     });
   });
@@ -120,22 +132,10 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Function to handle the game over scenario
-function gameOver() {
-  gameOverDiv.classList.remove('hidden');
-  let finalScore = totalScore;
-  if (checkAllSixes()) {
-    finalScore = -1;
-  } else if (finalScore === 30) {
-    finalScore = -1;
+  function gameOver() {
+    gameOverDiv.classList.remove('hidden');
+    finalScoreDisplay.textContent = `Final Score: ${totalScore}`;
   }
-  finalScoreDisplay.textContent = `Final Score: ${finalScore}`;
-}
-
-// Function to check if all dice are sixes
-function checkAllSixes() {
-  return dice.every(value => value === 6);
-}
-
 
   // Function to save the score and name in local storage
   function saveScore(name, score) {
@@ -147,19 +147,21 @@ function checkAllSixes() {
       scores.splice(33);
     }
     localStorage.setItem('threesScores', JSON.stringify(scores));
+    // Reset rolls count in local storage
+    localStorage.removeItem('threesRollsCount');
   }
 
   // Function to show the leaderboard page
   function showLeaderboardPage() {
     const scores = JSON.parse(localStorage.getItem('threesScores')) || [];
     leaderboardTable.innerHTML = '';
-    for (let i = 0; i < Math.min(scores.length, 11); i++) {
-      const entry = scores[i];
+    scores.forEach((entry, index) => {
       const row = document.createElement('div');
-      row.textContent = `${i + 1}. ${entry.name} - Score: ${entry.score} - Date: ${entry.date}`;
+      row.textContent = `${index + 1}. ${entry.name} - Score: ${entry.score} - Date: ${entry.date}`;
       leaderboardTable.appendChild(row);
-    }
-    leaderboardDiv.style.display = 'block';
+    });
+    leaderboardDiv.classList.remove('hidden');
+    leaderboardDiv.style.display = 'block'; // Ensure the leaderboard is visible
   }
 
   // Function to reset the game
@@ -170,8 +172,11 @@ function checkAllSixes() {
     totalScoreDisplay.textContent = 'Total Score: 0';
     gameOverDiv.classList.add('hidden');
     leaderboardDiv.classList.add('hidden');
+    instructionsModal.style.display = 'none'; // Hide instructions modal
     rollBtn.disabled = false;
     removedDice = [];
     canRoll = true;
+    rollsCount = 0; // Reset rolls count
+    rollsCounter.textContent = `Number of Rolls: ${rollsCount}`; // Update rolls counter display
   }
 });
