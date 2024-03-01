@@ -68,6 +68,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Calculate final score
     let finalScore = totalScore;
+    if (finalScore === 30) {
+      totalScore = -1;
+    }
     saveScore(name, finalScore);
     const showLeaderboard = confirm('Would you like to see the leaderboard?');
     if (showLeaderboard) {
