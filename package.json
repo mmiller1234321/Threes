@@ -1,0 +1,15 @@
+{
+    "name": "threes-game",
+    "version": "1.0.0",
+    "description": "A simple Threes game implementation",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "dependencies": {
+      "express": "^4.17.1",
+      "sequelize": "^6.8.0",
+      "pg": "^8.7.1" 
+    }
+  }
+  
