@@ -1,7 +1,7 @@
 {
-    "name": "threes-game",
+    "name": "your-app-name",
     "version": "1.0.0",
-    "description": "A simple Threes game implementation",
+    "description": "Your application description",
     "main": "server.js",
     "scripts": {
       "start": "node server.js"
@@ -9,7 +9,7 @@
     "dependencies": {
       "express": "^4.17.1",
       "sequelize": "^6.8.0",
-      "pg": "^8.7.1" 
+      "pg": "^8.7.1"
     }
   }
   
