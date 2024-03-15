@@ -1,6 +1,11 @@
 
 Classic Bar Game. 
 
+
+## New in Version 3
+
+Database created to store results and deployed on render
+
 ## New in Version 2
 Instructions!!!
 Improved styling!!!
@@ -18,7 +23,7 @@ Added dice roll counter
 Dice roll column added to Top 11 leaderboard
 
 ## Current Development
-Current version (V2) is a functional version of Threes (also known as "The Secret Dice Game"). Currently refactoring for better design and functionality. Found a bug? Please contact me. mmiller1234321@gmail.com
+Current version (V3) is a functional version of Threes (also known as "The Secret Dice Game") which is hosted on Render. Results are stored in database. Currently refactoring for better design and functionality. Found a bug? Please contact me. mmiller1234321@gmail.com
 
 Link:
 https://mmiller1234321.github.io/Threes/
