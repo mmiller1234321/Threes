@@ -1,13 +1,14 @@
 const { Client } = require('pg');
 const express = require('express');
-const cors = require('cors');
+const bodyParser = require('body-parser');
+const path = require('path');
 
 // PostgreSQL database connection configuration
 const dbConfig = {
-  user: 'results_db_sjfx_user',
-  host: 'dpg-cnqc81q1hbls73f7l6sg-a',
-  database: 'results_db_sjfx',
-  password: '4V8RryOH4CFAFsFTeB1sCoUCYLluNFVV',
+  user: 'postgres',
+  host: 'localhost',
+  database: 'results_db', // Change the database name to "results_db"
+  password: '1102',
   port: 5432,
 };
 
@@ -15,10 +16,8 @@ const client = new Client(dbConfig);
 
 // Express app setup
 const app = express();
-app.use(express.json()); // Parse JSON bodies
-app.use(cors()); // Enable CORS
-
-const port = process.env.PORT || 3000;
+app.use(bodyParser.json());
+const port = 3000;
 
 // Connect to PostgreSQL database
 client.connect()
@@ -63,6 +62,11 @@ app.post('/submit-score', async (req, res) => {
     console.error('Error inserting score:', error);
     res.status(500).send('Error submitting score');
   }
+});
+
+// Serve the game page
+app.get('/game', (req, res) => {
+  res.sendFile(path.join(__dirname, 'game.html'));
 });
 
 // Start the server
