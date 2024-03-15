@@ -1,14 +1,17 @@
 {
-  "name": "threes-dice-game",
+  "name": "your-app-name",
   "version": "1.0.0",
-  "description": "A dice game with leaderboard functionality",
-  "main": "server.js",
+  "description": "Your application description",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
   },
+  "keywords": [],
+  "author": "Your Name",
+  "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.1",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
-    "pg": "^8.6.0"
+    "pg": "^8.7.1"
   }
 }

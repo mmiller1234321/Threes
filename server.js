@@ -1,6 +1,7 @@
 const { Client } = require('pg');
 const express = require('express');
-const bodyParser = require('body-parser');
+const cors = require('cors');
+
 
 // PostgreSQL database connection configuration
 const dbConfig = {
@@ -15,7 +16,9 @@ const client = new Client(dbConfig);
 
 // Express app setup
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json()); // Parse JSON bodies
+app.use(cors()); // Enable CORS
+
 const port = 3000;
 
 // Connect to PostgreSQL database
