@@ -1,0 +1,14 @@
+{
+  "name": "threes-dice-game",
+  "version": "1.0.0",
+  "description": "A dice game with leaderboard functionality",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "express": "^4.17.1",
+    "pg": "^8.6.0"
+  }
+}

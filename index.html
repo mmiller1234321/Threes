@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Threes Dice Game</title>
+<title>Dice Game</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -21,8 +21,12 @@
   <div id="game-over" class="hidden">
     <h2>Game Over!</h2>
     <div id="final-score"></div>
-    <input type="text" id="name-input" placeholder="Enter name">
-    <button id="submit-score-btn">Submit Score</button>
+    <form id="submit-score-form">
+      <input type="text" id="name-input" placeholder="Enter your name" required>
+      <input type="hidden" id="score-input" name="score">
+      <input type="hidden" id="rolls-input" name="rolls">
+      <button type="submit">Submit Score</button>
+    </form>
   </div>
   <div id="leaderboard" class="modal-overlay hidden">
     <div class="modal-content">
@@ -45,8 +49,6 @@
     </p>
   </div>
 </div>
-
-<span class="secret-dice-game">Secret Dice Game</span>
 
 <script src="script.js"></script>
 </body>

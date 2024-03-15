@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const gameOverDiv = document.getElementById('game-over');
   const finalScoreDisplay = document.getElementById('final-score');
   const nameInput = document.getElementById('name-input');
-  const submitScoreBtn = document.getElementById('submit-score-btn');
+  const submitScoreForm = document.getElementById('submit-score-form');
   const leaderboardDiv = document.getElementById('leaderboard');
   const leaderboardTable = document.getElementById('leaderboard-table');
   const instructionsBtn = document.getElementById('instructions-btn');
@@ -20,15 +20,6 @@ document.addEventListener('DOMContentLoaded', function () {
   let rollsCount = 0;
   let canRoll = true;
 
-  // Retrieve rolls count from local storage if available
-  const storedRollsCount = localStorage.getItem('threesRollsCount');
-  if (storedRollsCount) {
-    rollsCount = parseInt(storedRollsCount);
-  }
-
-  // Update rolls counter display
-  rollsCounter.textContent = `Number of Rolls: ${rollsCount}`;
-
   // Event listener for roll button
   rollBtn.addEventListener('click', function () {
     if (canRoll) {
@@ -38,7 +29,6 @@ document.addEventListener('DOMContentLoaded', function () {
       canRoll = false;
       rollsCount++; // Increase rolls count
       rollsCounter.textContent = `Number of Rolls: ${rollsCount}`; // Update rolls counter display
-      localStorage.setItem('threesRollsCount', rollsCount); // Store rolls count in local storage
     }
   });
 
@@ -59,22 +49,30 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // Event listener for submitting score
-  submitScoreBtn.addEventListener('click', function () {
-    const name = nameInput.value.trim();
-    if (name === '') {
-      alert('Please enter your name.');
-      return;
-    }
+  submitScoreForm.addEventListener('submit', function (event) {
+    event.preventDefault();
 
-    // Calculate final score
-    let finalScore = totalScore;
-    saveScore(name, finalScore);
-    const showLeaderboard = confirm('Would you like to see the leaderboard?');
-    if (showLeaderboard) {
-      showLeaderboardPage();
-    } else {
+    const name = nameInput.value.trim();
+    const score = totalScore;
+    const rolls = rollsCount;
+
+    fetch('/submit-score', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name, score, rolls })
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Score submitted:', data);
+      alert(`Final Score: ${data.score}, Name: ${data.name}`);
       resetGame();
-    }
+    })
+    .catch(error => {
+      console.error('Error submitting score:', error);
+      alert('Failed to submit score');
+    });
   });
 
   // Event listener for instructions button
@@ -137,41 +135,6 @@ document.addEventListener('DOMContentLoaded', function () {
     finalScoreDisplay.textContent = `Final Score: ${totalScore}`;
   }
 
-  // Function to save the score and name in local storage
-  function saveScore(name, score) {
-    const scores = JSON.parse(localStorage.getItem('threesScores')) || [];
-    const newScore = { name, score, date: new Date().toLocaleString(), rolls: rollsCount }; // Add rolls count to the new score
-    scores.push(newScore);
-    scores.sort((a, b) => {
-      if (a.score !== b.score) {
-        return a.score - b.score;
-      } else {
-        // If scores are equal, the one with fewer rolls is better
-        return (a.rolls || 0) - (b.rolls || 0);
-      }
-    });
-    if (scores.length > 33) {
-      scores.splice(33);
-    }
-    localStorage.setItem('threesScores', JSON.stringify(scores));
-    // Reset rolls count in local storage
-    localStorage.removeItem('threesRollsCount');
-  }
-
-  // Function to show the leaderboard page
-  function showLeaderboardPage() {
-    const scores = JSON.parse(localStorage.getItem('threesScores')) || [];
-    const topScores = scores.slice(0, 11); // Get the top 11 scores
-    leaderboardTable.innerHTML = '';
-    topScores.forEach((entry, index) => {
-      const row = document.createElement('div');
-      row.textContent = `${index + 1}. ${entry.name} - Score: ${entry.score} - Date: ${entry.date} - Rolls: ${entry.rolls || ''}`; // Display rolls count if available
-      leaderboardTable.appendChild(row);
-    });
-    leaderboardDiv.classList.remove('hidden');
-    leaderboardDiv.style.display = 'block'; // Ensure the leaderboard is visible
-  }
-
   // Function to reset the game
   function resetGame() {
     diceContainer.innerHTML = '';
@@ -179,7 +142,6 @@ document.addEventListener('DOMContentLoaded', function () {
     totalScore = 0;
     totalScoreDisplay.textContent = 'Total Score: 0';
     gameOverDiv.classList.add('hidden');
-    leaderboardDiv.classList.add('hidden');
     instructionsModal.style.display = 'none'; // Hide instructions modal
     rollBtn.disabled = false;
     removedDice = [];
