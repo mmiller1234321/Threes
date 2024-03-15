@@ -2,13 +2,12 @@ const { Client } = require('pg');
 const express = require('express');
 const cors = require('cors');
 
-
 // PostgreSQL database connection configuration
 const dbConfig = {
-  user: 'postgres',
-  host: 'localhost',
-  database: 'results_db', // Change the database name to "results_db"
-  password: '1102',
+  user: 'results_db_sjfx_user',
+  host: 'dpg-cnqc81q1hbls73f7l6sg-a',
+  database: 'results_db_sjfx',
+  password: '4V8RryOH4CFAFsFTeB1sCoUCYLluNFVV',
   port: 5432,
 };
 
@@ -19,7 +18,7 @@ const app = express();
 app.use(express.json()); // Parse JSON bodies
 app.use(cors()); // Enable CORS
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // Connect to PostgreSQL database
 client.connect()
