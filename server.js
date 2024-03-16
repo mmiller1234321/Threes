@@ -2,6 +2,7 @@ const { Client } = require('pg');
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const Filter = require('bad-words');
 
 // PostgreSQL database connection configuration
 const dbConfig = {
@@ -43,8 +44,8 @@ async function createResultsTable() {
         id SERIAL PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         score INTEGER NOT NULL,
-        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        rolls INTEGER
+        rolls INTEGER NOT NULL,
+        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
     console.log('Results table created successfully');
@@ -56,11 +57,12 @@ async function createResultsTable() {
 // API endpoint to submit score
 app.post('/submit-score', async (req, res) => {
   const { name, score, rolls } = req.body;
+  const filteredName = filterName(name);
 
   try {
     const result = await client.query(
       'INSERT INTO results (name, score, rolls) VALUES ($1, $2, $3) RETURNING name, score, rolls',
-      [name, score, rolls]
+      [filteredName, score, rolls]
     );
     const insertedScore = result.rows[0];
     res.json(insertedScore); // Return only the player's name, score, and rolls
@@ -69,6 +71,12 @@ app.post('/submit-score', async (req, res) => {
     res.status(500).send('Error submitting score');
   }
 });
+
+// Filter out inappropriate words from the player's name
+function filterName(name) {
+  const filter = new Filter();
+  return filter.clean(name);
+}
 
 // Start the server
 app.listen(port, () => {
