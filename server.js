@@ -18,15 +18,18 @@ const client = new Client(dbConfig);
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use(express.static(path.join(__dirname, 'public'))); // Serve static files
 
 const port = process.env.PORT || 3000;
+
+// Serve static files (HTML, CSS, JavaScript)
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Connect to PostgreSQL database
 client.connect()
   .then(() => {
     console.log('Connected to PostgreSQL database');
-    createResultsTable(); // Create table if not exists
+    // Create the "results" table if it doesn't exist
+    createResultsTable();
   })
   .catch(error => {
     console.error('Error connecting to PostgreSQL database:', error);
