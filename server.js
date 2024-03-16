@@ -7,7 +7,7 @@ const Filter = require('bad-words');
 // PostgreSQL database connection configuration
 const dbConfig = {
   user: 'results_db_sjfx_user',
-  host: 'dpg-cnqc81q1hbls73f7l6sg-a',
+  host: 'dpg-cnqc81q1hbls73f7l6sg-a', // Remove the domain suffix here
   database: 'results_db_sjfx',
   password: '4V8RryOH4CFAFsFTeB1sCoUCYLluNFVV',
   port: 5432,
