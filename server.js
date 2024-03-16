@@ -11,7 +11,11 @@ const dbConfig = {
   database: 'results_db_sjfx',
   password: '4V8RryOH4CFAFsFTeB1sCoUCYLluNFVV',
   port: 5432,
+  ssl: {
+    rejectUnauthorized: false // This is used to accept self-signed certificates, you should provide the appropriate SSL configuration for your environment
+  }
 };
+
 
 const client = new Client(dbConfig);
 
