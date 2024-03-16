@@ -59,10 +59,11 @@ app.post('/submit-score', async (req, res) => {
 
   try {
     const result = await client.query(
-      'INSERT INTO results (name, score, rolls) VALUES ($1, $2, $3) RETURNING *',
+      'INSERT INTO results (name, score, rolls) VALUES ($1, $2, $3) RETURNING name, score, rolls',
       [name, score, rolls]
     );
-    res.json(result.rows[0]);
+    const insertedScore = result.rows[0];
+    res.json(insertedScore); // Return only the player's name, score, and rolls
   } catch (error) {
     console.error('Error inserting score:', error);
     res.status(500).send('Error submitting score');
