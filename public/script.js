@@ -148,5 +148,4 @@ document.addEventListener('DOMContentLoaded', function () {
     canRoll = true;
     rollsCount = 0; // Reset rolls count
     rollsCounter.textContent = `Number of Rolls: ${rollsCount}`; // Update rolls counter display
-  }
-});
+  });
