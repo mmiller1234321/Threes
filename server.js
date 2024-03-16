@@ -1,14 +1,14 @@
 const { Client } = require('pg');
 const express = require('express');
-const bodyParser = require('body-parser');
+const cors = require('cors');
 const path = require('path');
 
 // PostgreSQL database connection configuration
 const dbConfig = {
-  user: 'postgres',
-  host: 'localhost',
-  database: 'results_db', // Change the database name to "results_db"
-  password: '1102',
+  user: 'results_db_sjfx_user',
+  host: 'dpg-cnqc81q1hbls73f7l6sg-a',
+  database: 'results_db_sjfx',
+  password: '4V8RryOH4CFAFsFTeB1sCoUCYLluNFVV',
   port: 5432,
 };
 
@@ -16,15 +16,17 @@ const client = new Client(dbConfig);
 
 // Express app setup
 const app = express();
-app.use(bodyParser.json());
-const port = 3000;
+app.use(express.json());
+app.use(cors());
+app.use(express.static(path.join(__dirname, 'public'))); // Serve static files
+
+const port = process.env.PORT || 3000;
 
 // Connect to PostgreSQL database
 client.connect()
   .then(() => {
     console.log('Connected to PostgreSQL database');
-    // Create the "results" table if it doesn't exist
-    createResultsTable();
+    createResultsTable(); // Create table if not exists
   })
   .catch(error => {
     console.error('Error connecting to PostgreSQL database:', error);
@@ -62,11 +64,6 @@ app.post('/submit-score', async (req, res) => {
     console.error('Error inserting score:', error);
     res.status(500).send('Error submitting score');
   }
-});
-
-// Serve the game page
-app.get('/game', (req, res) => {
-  res.sendFile(path.join(__dirname, 'game.html'));
 });
 
 // Start the server

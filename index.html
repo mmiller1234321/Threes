@@ -21,8 +21,8 @@
   <div id="game-over" class="hidden">
     <h2>Game Over!</h2>
     <div id="final-score"></div>
-    <form id="submit-score-form">
-      <input type="text" id="name-input" placeholder="Enter your name" required>
+    <form id="submit-score-form" action="/submit-score" method="POST"> <!-- Updated form action -->
+      <input type="text" id="name-input" name="name" placeholder="Enter your name" required> <!-- Added name attribute -->
       <input type="hidden" id="score-input" name="score">
       <input type="hidden" id="rolls-input" name="rolls">
       <button type="submit">Submit Score</button>
