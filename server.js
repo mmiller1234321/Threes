@@ -108,7 +108,6 @@ async function getLeaderboard(){
   await client.query(`
     SELECT * FROM leaderboard
     LIMIT 11
-    RETURNING name, score, rolls
   `)
 }
 
