@@ -84,7 +84,7 @@ app.post('/submit-score', async (req, res) => {
   try {
     // we always want to store the score in the results table
     const result = await client.query(
-      'INSERT INTO results (name, score, rolls)\q VALUES ($1, $2, $3) RETURNING name, score, rolls',
+      'INSERT INTO results (name, score, rolls) VALUES ($1, $2, $3) RETURNING name, score, rolls',
       [filteredName, score, rolls]
     );
     // lets check to see if it's a top 11 score
