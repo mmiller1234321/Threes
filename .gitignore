@@ -1,0 +1,38 @@
+# Node modules
+node_modules/
+
+# Environment variables file
+.env
+
+# IDE and editor files
+.vscode/
+.idea/
+*.code-workspace
+
+# Logs
+logs/
+*.log
+
+# Dependency directories
+pids/
+logs/
+*.pid
+*.seed
+*.pid.lock
+
+# npm debugging log files
+npm-debug.log*
+
+# Yarn integrity file
+.yarn-integrity
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# PGPASSWORD=4V8RryOH4CFAFsFTeB1sCoUCYLluNFVV psql -h dpg-cnqc81q1hbls73f7l6sg-a.ohio-postgres.render.com -U results_db_sjfx_user results_db_sjfx
+# Dependency directories
+/jspm_packages/
+/bower_components/

@@ -57,6 +57,23 @@ async function createResultsTable() {
   }
 }
 
+// Function to create the "leaderboard" table
+async function createLeaderboardTable() {
+  try {
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS leaderboard (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        score INTEGER NOT NULL,
+        rolls INTEGER NOT NULL
+      )
+    `);
+    console.log('Leaderboard table created successfully');
+  } catch (error) {
+    console.error('Error creating leaderboard table:', error);
+  }
+}
+
 // API endpoint to submit score
 app.post('/submit-score', async (req, res) => {
   const { name, score, rolls } = req.body;
@@ -67,6 +84,10 @@ app.post('/submit-score', async (req, res) => {
       'INSERT INTO results (name, score, rolls) VALUES ($1, $2, $3) RETURNING name, score, rolls',
       [filteredName, score, rolls]
     );
+
+    // Update leaderboard
+    updateLeaderboard();
+    
     const insertedScore = result.rows[0];
     res.json(insertedScore); // Return only the player's name, score, and rolls
   } catch (error) {
@@ -74,6 +95,23 @@ app.post('/submit-score', async (req, res) => {
     res.status(500).send('Error submitting score');
   }
 });
+
+// Function to update the leaderboard
+async function updateLeaderboard() {
+  try {
+    await client.query(`
+      DELETE FROM leaderboard;
+      INSERT INTO leaderboard (name, score, rolls)
+      SELECT name, score, rolls
+      FROM results
+      ORDER BY score, rolls
+      LIMIT 11;
+    `);
+    console.log('Leaderboard updated successfully');
+  } catch (error) {
+    console.error('Error updating leaderboard:', error);
+  }
+}
 
 // Filter out inappropriate words from the player's name
 function filterName(name) {
