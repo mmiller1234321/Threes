@@ -16,7 +16,6 @@ const dbConfig = {
   }
 };
 
-
 const client = new Client(dbConfig);
 
 // Express app setup

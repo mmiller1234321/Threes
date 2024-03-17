@@ -131,6 +131,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Function to handle the game over scenario
   function gameOver() {
+    if (totalScore === 30) {
+      totalScore = -1; // Set final score to -1 if it equals 30
+    }
     gameOverDiv.classList.remove('hidden');
     finalScoreDisplay.textContent = `Final Score: ${totalScore}`;
   }
