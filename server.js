@@ -82,25 +82,30 @@ app.post('/submit-score', async (req, res) => {
   const filteredName = filterName(name);
 
   try {
-    // we always want to store the score in the results table
-    const result = await client.query(
-      'INSERT INTO results (name, score, rolls) VALUES ($1, $2, $3) RETURNING name, score, rolls',
+    // Insert the score into the results table
+    await client.query(
+      'INSERT INTO results (name, score, rolls) VALUES ($1, $2, $3)',
       [filteredName, score, rolls]
     );
-    // lets check to see if it's a top 11 score
-    // const isTop11 = checkTop11() // either true or false
-    const res1 = await getLeaderboard()
-    console.log(res1)
-    // Update leaderboard if so
-    // if(isTop11) updateLeaderboard();
-    await updateLeaderboard(filteredName, score, rolls)
-    const res2 = await getLeaderboard()
-    console.log(res2)
-    const insertedScore = result.rows[0];
-    res.json(insertedScore); // Return only the player's name, score, and rolls
+
+    // Update leaderboard
+    await updateLeaderboard();
+
+    res.status(200).send('Score submitted successfully');
   } catch (error) {
-    console.error('Error inserting score:', error);
+    console.error('Error submitting score:', error);
     res.status(500).send('Error submitting score');
+  }
+});
+
+// Endpoint to get the leaderboard
+app.get('/leaderboard', async (req, res) => {
+  try {
+    const leaderboard = await getLeaderboard();
+    res.json(leaderboard);
+  } catch (error) {
+    console.error('Error retrieving leaderboard:', error);
+    res.status(500).send('Error retrieving leaderboard');
   }
 });
 
@@ -119,31 +124,26 @@ async function getLeaderboard() {
   }
 }
 
-
-
 // Function to update the leaderboard
-async function updateLeaderboard(name, score, rolls) {
+async function updateLeaderboard() {
   try {
-    await client.query(
-      'INSERT INTO leaderboard (name, score, rolls) VALUES ($1, $2, $3) RETURNING name, score, rolls',
-      [name, score, rolls]
-    );
+    // Clear existing entries in the leaderboard table
+    await client.query('DELETE FROM leaderboard');
 
-   
+    // Insert the top 11 scores from the results table into the leaderboard
+    await client.query(`
+      INSERT INTO leaderboard (name, score, rolls)
+      SELECT name, score, rolls
+      FROM results
+      ORDER BY score ASC, rolls ASC
+      LIMIT 11
+    `);
+
     console.log('Leaderboard updated successfully');
   } catch (error) {
     console.error('Error updating leaderboard:', error);
   }
 }
-
-/**
- *       DELETE FROM leaderboard;
-      INSERT INTO leaderboard (name, score, rolls)
-      SELECT name, score, rolls
-      FROM results
-      ORDER BY score, rolls
-      LIMIT 11;
- */
 
 // Filter out inappropriate words from the player's name
 function filterName(name) {
