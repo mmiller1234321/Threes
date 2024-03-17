@@ -104,12 +104,21 @@ app.post('/submit-score', async (req, res) => {
   }
 });
 
-async function getLeaderboard(){
-  await client.query(`
-    SELECT * FROM leaderboard
-    LIMIT 11
-  `)
+async function getLeaderboard() {
+  try {
+    const result = await client.query(`
+      SELECT name, score, rolls
+      FROM leaderboard
+      ORDER BY score ASC, rolls ASC
+      LIMIT 11
+    `);
+    return result.rows;
+  } catch (error) {
+    console.error('Error retrieving leaderboard:', error);
+    throw error;
+  }
 }
+
 
 // Function to update the leaderboard
 async function updateLeaderboard(name, score, rolls) {
