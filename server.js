@@ -28,6 +28,9 @@ const port = process.env.PORT || 3000;
 // Serve static files (HTML, CSS, JavaScript)
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Instantiate Filter
+const filter = new Filter();
+
 // Connect to PostgreSQL database
 client.connect()
   .then(() => {
@@ -147,7 +150,6 @@ async function updateLeaderboard() {
 
 // Filter out inappropriate words from the player's name
 function filterName(name) {
-  const filter = new Filter();
   return filter.clean(name);
 }
 
