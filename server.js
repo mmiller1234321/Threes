@@ -38,7 +38,6 @@ client.connect()
     // Create the "results" table if it doesn't exist
     createResultsTable();
     createLeaderboardTable();
-
   })
   .catch(error => {
     console.error('Error connecting to PostgreSQL database:', error);
@@ -94,10 +93,10 @@ app.post('/submit-score', async (req, res) => {
     // Update leaderboard
     await updateLeaderboard();
 
-    res.status(200).send('Score submitted successfully');
+    res.status(200).json({ name: filteredName, score, rolls }); // Return JSON response
   } catch (error) {
     console.error('Error submitting score:', error);
-    res.status(500).send('Error submitting score');
+    res.status(500).json({ error: 'Error submitting score' }); // Return JSON response
   }
 });
 

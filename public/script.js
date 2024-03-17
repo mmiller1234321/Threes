@@ -59,11 +59,16 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch('/submit-score', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json' // Set content type to JSON
       },
       body: JSON.stringify({ name, score, rolls })
     })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
     .then(data => {
       console.log('Score submitted:', data);
       alert(`Name: ${data.name}\nFinal Score: ${data.score}\nRolls: ${data.rolls}`);
