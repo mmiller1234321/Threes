@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
     .then(response => response.json())
     .then(data => {
       console.log('Score submitted:', data);
-      alert(`Final Score: ${data.score}\nName: ${data.name}\nRolls: ${data.rolls}`);
+      alert(`Name: ${data.name}\nFinal Score: ${data.score}\nRolls: ${data.rolls}`);
       resetGame();
     })
     .catch(error => {
