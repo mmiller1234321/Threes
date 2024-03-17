@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const leaderboardDiv = document.getElementById('leaderboard');
   const leaderboardTable = document.getElementById('leaderboard-table');
   const instructionsBtn = document.getElementById('instructions-btn');
-  const instructionsModal = document.getElementById('instructions-modal');
   const closeBtns = document.querySelectorAll('.close');
   const rollsCounter = document.getElementById('rolls-counter');
+  const leaderboardBtn = document.getElementById('leaderboard-btn'); // Added leaderboard button
 
   let dice = [];
   let removedDice = [];
@@ -74,6 +74,35 @@ document.addEventListener('DOMContentLoaded', function () {
       alert('Failed to submit score');
     });
   });
+
+  // Event listener for leaderboard button
+  leaderboardBtn.addEventListener('click', function () {
+    fetch('/leaderboard')
+      .then(response => response.json())
+      .then(data => {
+        displayLeaderboard(data);
+        leaderboardDiv.classList.remove('hidden');
+      })
+      .catch(error => {
+        console.error('Error fetching leaderboard:', error);
+        alert('Failed to fetch leaderboard');
+      });
+  });
+
+  function displayLeaderboard(scores) {
+    leaderboardTable.innerHTML = ''; // Clear existing leaderboard
+    scores.forEach((score, index) => {
+      const row = document.createElement('div');
+      row.classList.add('leaderboard-row');
+      row.innerHTML = `
+        <span class="leaderboard-rank">${index + 1}</span>
+        <span class="leaderboard-name">${score.name}</span>
+        <span class="leaderboard-score">${score.score}</span>
+        <span class="leaderboard-rolls">${score.rolls}</span>
+      `;
+      leaderboardTable.appendChild(row);
+    });
+  }
 
   // Event listener for instructions button
   instructionsBtn.addEventListener('click', function () {

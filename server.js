@@ -75,6 +75,19 @@ app.post('/submit-score', async (req, res) => {
   }
 });
 
+// API endpoint to get top 11 scores
+app.get('/leaderboard', async (req, res) => {
+  try {
+    const result = await client.query(
+      'SELECT name, score, rolls FROM results ORDER BY score = -1 ASC, score ASC, rolls ASC, date ASC LIMIT 11'
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching leaderboard:', error);
+    res.status(500).send('Error fetching leaderboard');
+  }
+});
+
 // Filter out inappropriate words from the player's name
 function filterName(name) {
   const filter = new Filter();
