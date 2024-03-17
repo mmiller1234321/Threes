@@ -120,6 +120,7 @@ async function getLeaderboard() {
 }
 
 
+
 // Function to update the leaderboard
 async function updateLeaderboard(name, score, rolls) {
   try {
