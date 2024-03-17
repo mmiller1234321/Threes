@@ -84,7 +84,7 @@ app.post('/submit-score', async (req, res) => {
   try {
     // we always want to store the score in the results table
     const result = await client.query(
-      'INSERT INTO results (name, score, rolls) VALUES ($1, $2, $3) RETURNING name, score, rolls',
+      'INSERT INTO results (name, score, rolls)\q VALUES ($1, $2, $3) RETURNING name, score, rolls',
       [filteredName, score, rolls]
     );
     // lets check to see if it's a top 11 score
@@ -108,7 +108,7 @@ async function getLeaderboard(){
   await client.query(`
     SELECT * FROM leaderboard
     LIMIT 11
-    ORDER BY score, rolls
+    RETURNING name, score, rolls
   `)
 }
 
@@ -116,7 +116,7 @@ async function getLeaderboard(){
 async function updateLeaderboard(name, score, rolls) {
   try {
     await client.query(
-      'INSERT INTO results (name, score, rolls) VALUES ($1, $2, $3) RETURNING name, score, rolls',
+      'INSERT INTO leaderboard (name, score, rolls) VALUES ($1, $2, $3) RETURNING name, score, rolls',
       [name, score, rolls]
     );
 
