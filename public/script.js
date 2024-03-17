@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const leaderboardDiv = document.getElementById('leaderboard');
   const leaderboardTable = document.getElementById('leaderboard-table');
   const instructionsBtn = document.getElementById('instructions-btn');
+  const leaderboardBtn = document.getElementById('leaderboard-btn'); // Added reference to leaderboard button
   const instructionsModal = document.getElementById('instructions-modal');
   const closeBtns = document.querySelectorAll('.close');
   const rollsCounter = document.getElementById('rolls-counter');
@@ -30,6 +31,11 @@ document.addEventListener('DOMContentLoaded', function () {
       rollsCount++; // Increase rolls count
       rollsCounter.textContent = `Number of Rolls: ${rollsCount}`; // Update rolls counter display
     }
+  });
+
+  // Event listener for leaderboard button
+  leaderboardBtn.addEventListener('click', function () {
+    fetchLeaderboard();
   });
 
   // Event listener for clicking on dice
@@ -156,5 +162,24 @@ document.addEventListener('DOMContentLoaded', function () {
     canRoll = true;
     rollsCount = 0; // Reset rolls count
     rollsCounter.textContent = `Number of Rolls: ${rollsCount}`; // Update rolls counter display
+  }
+
+  // Function to fetch and display the leaderboard
+  function fetchLeaderboard() {
+    fetch('/leaderboard')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        const leaderboardRows = data.map(row => `${row.name}: ${row.score}, Rolls: ${row.rolls}`).join('\n');
+        alert(`Top 11 Leaderboard:\n${leaderboardRows}`);
+      })
+      .catch(error => {
+        console.error('Error fetching leaderboard:', error);
+        alert('Failed to fetch leaderboard');
+      });
   }
 });
