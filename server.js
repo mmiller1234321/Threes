@@ -88,10 +88,14 @@ app.post('/submit-score', async (req, res) => {
       [filteredName, score, rolls]
     );
     // lets check to see if it's a top 11 score
-    const isTop11 = checkTop11() // either true or false
+    // const isTop11 = checkTop11() // either true or false
+    const res1 = await getLeaderboard()
+    console.log(res1)
     // Update leaderboard if so
-    if(isTop11) updateLeaderboard();
-    
+    // if(isTop11) updateLeaderboard();
+    await updateLeaderboard(filteredName, score, rolls)
+    const res2 = await getLeaderboard()
+    console.log(res2)
     const insertedScore = result.rows[0];
     res.json(insertedScore); // Return only the player's name, score, and rolls
   } catch (error) {
@@ -100,22 +104,37 @@ app.post('/submit-score', async (req, res) => {
   }
 });
 
+async function getLeaderboard(){
+  await client.query(`
+    SELECT * FROM leaderboard
+    LIMIT 11
+    ORDER BY score, rolls
+  `)
+}
+
 // Function to update the leaderboard
-async function updateLeaderboard() {
+async function updateLeaderboard(name, score, rolls) {
   try {
-    await client.query(`
-      DELETE FROM leaderboard;
-      INSERT INTO leaderboard (name, score, rolls)
-      SELECT name, score, rolls
-      FROM results
-      ORDER BY score, rolls
-      LIMIT 11;
-    `);
+    await client.query(
+      'INSERT INTO results (name, score, rolls) VALUES ($1, $2, $3) RETURNING name, score, rolls',
+      [name, score, rolls]
+    );
+
+   
     console.log('Leaderboard updated successfully');
   } catch (error) {
     console.error('Error updating leaderboard:', error);
   }
 }
+
+/**
+ *       DELETE FROM leaderboard;
+      INSERT INTO leaderboard (name, score, rolls)
+      SELECT name, score, rolls
+      FROM results
+      ORDER BY score, rolls
+      LIMIT 11;
+ */
 
 // Filter out inappropriate words from the player's name
 function filterName(name) {

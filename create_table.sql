@@ -12,3 +12,5 @@ CREATE TABLE leaderboard (
   score INTEGER NOT NULL,
   rolls INTEGER NOT NULL
 );
+
+// Keep this and use for later to keep all queries here
