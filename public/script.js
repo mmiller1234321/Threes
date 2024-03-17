@@ -1,185 +1,140 @@
-document.addEventListener('DOMContentLoaded', function () {
-  const rollBtn = document.getElementById('roll-dice-btn');
-  const diceContainer = document.getElementById('dice-container');
-  const removedDiceContainer = document.getElementById('removed-dice');
-  const totalScoreDisplay = document.getElementById('total-score');
-  const gameOverDiv = document.getElementById('game-over');
-  const finalScoreDisplay = document.getElementById('final-score');
-  const nameInput = document.getElementById('name-input');
-  const submitScoreForm = document.getElementById('submit-score-form');
-  const leaderboardDiv = document.getElementById('leaderboard');
-  const leaderboardTable = document.getElementById('leaderboard-table');
-  const instructionsBtn = document.getElementById('instructions-btn');
-  const leaderboardBtn = document.getElementById('leaderboard-btn'); // Added reference to leaderboard button
-  const instructionsModal = document.getElementById('instructions-modal');
-  const closeBtns = document.querySelectorAll('.close');
-  const rollsCounter = document.getElementById('rolls-counter');
+/* General styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #88cec2; /* Updated background color */
+  position: relative; /* Added position relative to body */
+}
 
-  let dice = [];
-  let removedDice = [];
-  let totalScore = 0;
-  let rollsCount = 0;
-  let canRoll = true;
+.container {
+  position: absolute;
+  top: 25%;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  background-color: #88cec2; /* Updated background color */
+}
 
-  // Event listener for roll button
-  rollBtn.addEventListener('click', function () {
-    if (canRoll) {
-      rollDice();
-      renderDice();
-      rollBtn.disabled = true;
-      canRoll = false;
-      rollsCount++; // Increase rolls count
-      rollsCounter.textContent = `Number of Rolls: ${rollsCount}`; // Update rolls counter display
-    }
-  });
+.dice-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  margin-top: 20px;
+}
 
-  // Event listener for leaderboard button
-  leaderboardBtn.addEventListener('click', function () {
-    fetchLeaderboard();
-  });
+.die {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  border: 1px solid black;
+  margin: 0 5px;
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #88cec2; /* Updated background color */
+}
 
-  // Event listener for clicking on dice
-  diceContainer.addEventListener('click', function (event) {
-    const die = event.target;
-    if (!die.classList.contains('die')) return;
+.removed-dice-container {
+  margin-top: 20px;
+  background-color: #88cec2; /* Updated background color */
+}
 
-    if (confirm('Are you sure you want to remove this die?')) {
-      const value = parseInt(die.textContent);
-      totalScore += (value === 3) ? 0 : value;
-      removedDice.push(value);
-      removedDiceContainer.appendChild(die);
-      updateTotalScore();
-      updateDiceCounter();
-      canRoll = true;
-    }
-  });
+.removed-die {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  border: 1px solid black;
+  margin: 0 5px;
+  font-size: 20px;
+  background-color: #88cec2; /* Updated background color */
+}
 
-  // Event listener for submitting score
-  submitScoreForm.addEventListener('submit', function (event) {
-    event.preventDefault();
+.hidden {
+  display: none;
+}
 
-    const name = nameInput.value.trim();
-    const score = totalScore;
-    const rolls = rollsCount;
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(136, 206, 194, 0.5); /* Updated background color with rgba */
+}
 
-    fetch('/submit-score', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json' // Set content type to JSON
-      },
-      body: JSON.stringify({ name, score, rolls })
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log('Score submitted:', data);
-      alert(`Name: ${data.name}\nFinal Score: ${data.score}\nRolls: ${data.rolls}`);
-      resetGame();
-    })
-    .catch(error => {
-      console.error('Error submitting score:', error);
-      alert('Failed to submit score');
-    });
-  });
+.modal-content {
+  background-color: #fefefe;
+  margin: 0;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+  border-radius: 5px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
 
-  // Event listener for instructions button
-  instructionsBtn.addEventListener('click', function () {
-    instructionsModal.style.display = 'block';
-  });
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
 
-  // Event listeners for closing modals
-  closeBtns.forEach(btn => {
-    btn.addEventListener('click', function () {
-      const modal = btn.parentElement.parentElement;
-      modal.style.display = 'none';
-      if (modal === instructionsModal) {
-        // Do not reset game when closing instructions modal
-        return;
-      }
-      if (modal === leaderboardDiv) {
-        resetGame(); // Restart the game when closing leaderboard modal
-      }
-    });
-  });
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
 
-  // Function to roll the dice
-  function rollDice() {
-    dice = [];
-    for (let i = 0; i < 5 - removedDice.length; i++) {
-      dice.push(Math.floor(Math.random() * 6) + 1);
-    }
+/* Instructions button position */
+#instructions-btn {
+  position: fixed;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Secret Dice Game text */
+.secret-dice-game {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 8px;
+  background-color: #88cec2; /* Updated background color */
+}
+
+/* Media query for larger screens */
+@media screen and (min-width: 1024px) {
+  .secret-dice-game {
+    font-size: 8px;
   }
+}
 
-  // Function to render the dice
-  function renderDice() {
-    diceContainer.innerHTML = '';
-    dice.forEach(value => {
-      const die = document.createElement('div');
-      die.classList.add('die');
-      die.textContent = value;
-      diceContainer.appendChild(die);
-    });
+/* Media query for phones */
+@media screen and (max-width: 600px) {
+  .secret-dice-game {
+    font-size: calc(8px); /* Set font size to 1/3 of the current size */
+    bottom: 10px; /* Adjust position */
+    left: 10px; /* Adjust position */
+    right: unset; /* Remove right position */
   }
+}
 
-  // Function to update the total score display
-  function updateTotalScore() {
-    totalScoreDisplay.textContent = `Total Score: ${totalScore}`;
-  }
+#roll-dice-btn {
+  font-size: 110%; /* Increase font size by 10% */
+}
 
-  // Function to update the dice counter
-  function updateDiceCounter() {
-    const remainingDiceCount = 5 - removedDice.length;
-    if (remainingDiceCount === 0) {
-      gameOver();
-    } else {
-      rollBtn.disabled = false;
-    }
-  }
-
-  // Function to handle the game over scenario
-  function gameOver() {
-    if (totalScore === 30) {
-      totalScore = -1; // Set final score to -1 if it equals 30
-    }
-    gameOverDiv.classList.remove('hidden');
-    finalScoreDisplay.textContent = `Final Score: ${totalScore}`;
-  }
-
-  // Function to reset the game
-  function resetGame() {
-    diceContainer.innerHTML = '';
-    removedDiceContainer.innerHTML = '';
-    totalScore = 0;
-    totalScoreDisplay.textContent = 'Total Score: 0';
-    gameOverDiv.classList.add('hidden');
-    instructionsModal.style.display = 'none'; // Hide instructions modal
-    rollBtn.disabled = false;
-    removedDice = [];
-    canRoll = true;
-    rollsCount = 0; // Reset rolls count
-    rollsCounter.textContent = `Number of Rolls: ${rollsCount}`; // Update rolls counter display
-  }
-
-  // Function to fetch and display the leaderboard
-  function fetchLeaderboard() {
-    fetch('/leaderboard')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        const leaderboardRows = data.map(row => `${row.name}: ${row.score}, Rolls: ${row.rolls}`).join('\n');
-        alert(`Top 11 Leaderboard:\n${leaderboardRows}`);
-      })
-      .catch(error => {
-        console.error('Error fetching leaderboard:', error);
-        alert('Failed to fetch leaderboard');
-      });
-  }
-});
+#instructions-btn {
+  font-size: 100%; /* Reset font size to default */
+}
