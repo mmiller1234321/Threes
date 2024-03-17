@@ -4,7 +4,7 @@ Classic Bar Game.
 
 ## New in Version 3
 
-Database created to store results and deployed on render! Deployed successfully. Currently in testing. 
+Database created to store results and deployed on render! Deployed successfully. Currently in testing. Top 11 Leaderboard that client can access from server!
 
 ## New in Version 2
 Instructions!!!
