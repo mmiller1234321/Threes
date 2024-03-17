@@ -34,6 +34,8 @@ client.connect()
     console.log('Connected to PostgreSQL database');
     // Create the "results" table if it doesn't exist
     createResultsTable();
+    createLeaderboardTable();
+
   })
   .catch(error => {
     console.error('Error connecting to PostgreSQL database:', error);
@@ -80,13 +82,15 @@ app.post('/submit-score', async (req, res) => {
   const filteredName = filterName(name);
 
   try {
+    // we always want to store the score in the results table
     const result = await client.query(
       'INSERT INTO results (name, score, rolls) VALUES ($1, $2, $3) RETURNING name, score, rolls',
       [filteredName, score, rolls]
     );
-
-    // Update leaderboard
-    updateLeaderboard();
+    // lets check to see if it's a top 11 score
+    const isTop11 = checkTop11() // either true or false
+    // Update leaderboard if so
+    if(isTop11) updateLeaderboard();
     
     const insertedScore = result.rows[0];
     res.json(insertedScore); // Return only the player's name, score, and rolls
