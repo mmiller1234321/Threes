@@ -66,7 +66,6 @@ async function createLeaderboardTable() {
   try {
     await client.query(`
       CREATE TABLE IF NOT EXISTS leaderboard (
-        id SERIAL PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         score INTEGER NOT NULL,
         rolls INTEGER NOT NULL
