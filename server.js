@@ -136,6 +136,7 @@ async function updateLeaderboard() {
       INSERT INTO leaderboard (name, score, rolls)
       SELECT name, score, rolls
       FROM results
+      WHERE score >= 0 AND score <= 29 AND rolls > 0 AND rolls < 5 -- Added condition
       ORDER BY score ASC, rolls ASC
       LIMIT 11
     `);

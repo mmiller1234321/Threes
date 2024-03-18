@@ -182,4 +182,4 @@ document.addEventListener('DOMContentLoaded', function () {
         alert('Failed to fetch leaderboard');
       });
   }
-});
+}); 
