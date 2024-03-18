@@ -1,11 +1,11 @@
-const { Client } = require('pg');
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
-const Filter = require('bad-words');
+import { Client } from 'pg';
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import Filter from 'bad-words';
 
-const dbConfig = require('./dbConfig');
-const { createResultsTable, createLeaderboardTable, updateLeaderboard, getLeaderboard } = require('./database');
+import dbConfig from './dbConfig';
+import { createResultsTable, createLeaderboardTable, updateLeaderboard, getLeaderboard } from './database';
 
 const app = express();
 app.use(express.json());
@@ -47,7 +47,7 @@ app.post('/submit-score', async (req, res) => {
   }
 });
 
-app.get('/leaderboard', async (req, res) => {
+app.get('/leaderboard', async (_, res) => {
   try {
     const leaderboard = await getLeaderboard();
     res.json(leaderboard);
