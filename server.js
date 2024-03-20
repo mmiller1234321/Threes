@@ -77,7 +77,7 @@ async function createLeaderboardTable() {
   }
 }
 
-// API endpoint to submit score
+// API endpoint to submit score, authentiaction token would go immediately before async
 app.post('/submit-score', async (req, res) => {
   const { name, score, rolls } = req.body;
   const filteredName = filterName(name);
